@@ -10,6 +10,7 @@ AddEventHandler("fivemsociety:houserent",function(price,houseid)
     local xPlayer = ESX.GetPlayerFromId(src)
     if Config.MoneyCheck == 'cash' then
         if xPlayer.getMoney() >= price then
+	    xPlayer.removeMoney(price)
             MySQL.Async.execute('INSERT INTO fivemsociety_housing (identifier, houseid) VALUES (@identifier, @houseid)',{
             ['@identifier'] = xPlayer.identifier, ['@houseid'] = houseid })
             TriggerClientEvent("notification",src,'Ev satın alındı',3)
@@ -20,6 +21,7 @@ AddEventHandler("fivemsociety:houserent",function(price,houseid)
         end
     elseif Config.MoneyCheck == 'bank' then
         if xPlayer.getAccount('bank').money >= price then
+	    xPlayer.removeAccountMoney("bank", price)
             MySQL.Async.execute('INSERT INTO fivemsociety_housing (identifier, houseid) VALUES (@identifier, @houseid)',{
             ['@identifier'] = xPlayer.identifier, ['@houseid'] = houseid })
             TriggerClietEvent("notification",src,'Ev satın alındı',3)
